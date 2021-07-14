@@ -67,7 +67,7 @@ class help_menu(QtWidgets.QMenu):
         self.addAction(visit_repo)
 
     def go_to_repo(self):
-        PyQt5.QtGui.QDesktopServices.openUrl(QtCore.QUrl('https://github.com/turtlebasket/crds-time-analyzer'))
+        PyQt5.QtGui.QDesktopServices.openUrl(QtCore.QUrl('https://github.com/turtlebasket/crds_analyze'))
 
 # Inputs / Parameter boxes
 

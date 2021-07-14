@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>CRDS Time Analyzer</string>
+   <string>CRDS Scanalyzer</string>
   </property>
   <property name="styleSheet">
    <string notr="true">QGroupBox: {font-style: bold; font-size: 8px }</string>
@@ -149,7 +149,7 @@
          <x>0</x>
          <y>0</y>
          <width>221</width>
-         <height>101</height>
+         <height>103</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout">
@@ -445,7 +445,7 @@
      <x>0</x>
      <y>0</y>
      <width>1091</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="file_menu" name="menuFile">
