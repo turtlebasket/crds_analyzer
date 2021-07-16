@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.signal import find_peaks, correlate
+from memdb import mem
 
 def spaced_groups(
     x_data: np.array,
@@ -110,3 +111,20 @@ def correlate_groups(groups_raw):
         groups_adjusted.append(x)
 
     return groups_adjusted
+
+def isolate_peaks(
+    peak_width: int, 
+    groups_adjusted: list, 
+    peak_minheight: int,
+    peak_prominence: int,
+    sma_denom: int
+):
+
+    def moving_average(x, w):
+        return np.convolve(x, np.ones(w), 'valid') / w
+
+    group_peaks = []
+    for g in groups_adjusted:
+        y_data_av = moving_average(g, sma_denom)
+        peak_indices = find_peaks(y_data_av, height=peak_minheight, prominence=peak_prominence) # Get indices of all peaks
+        group_peaks.append(peak_indices)

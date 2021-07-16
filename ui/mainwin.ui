@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1091</width>
-    <height>580</height>
+    <height>611</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <string notr="true">QGroupBox: {font-style: bold; font-size: 8px }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="graph_tab" name="tabWidget">
+   <widget class="QTabWidget" name="graph_tabs">
     <property name="geometry">
      <rect>
       <x>260</x>
@@ -38,7 +38,7 @@
      <attribute name="title">
       <string>Raw Data</string>
      </attribute>
-     <widget class="rawdata_graph" name="widget" native="true">
+     <widget class="RawDataGraph" name="raw_data_graph" native="true">
       <property name="geometry">
        <rect>
         <x>-1</x>
@@ -53,7 +53,7 @@
      <attribute name="title">
       <string>Groups</string>
      </attribute>
-     <widget class="peaks_graph" name="widget_2" native="true">
+     <widget class="PeaksGraph" name="groups_graph" native="true">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -68,7 +68,7 @@
      <attribute name="title">
       <string>Time Constant</string>
      </attribute>
-     <widget class="timeconstant_graph" name="widget_3" native="true">
+     <widget class="TimeConstantGraph" name="tau_graph" native="true">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -84,9 +84,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>70</y>
+      <y>120</y>
       <width>241</width>
-      <height>141</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="font">
@@ -99,13 +99,13 @@
     <property name="title">
      <string>Grouping Config</string>
     </property>
-    <widget class="config_area" name="stackedWidget">
+    <widget class="QStackedWidget" name="stackedWidget">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>20</y>
+       <y>50</y>
        <width>221</width>
-       <height>111</height>
+       <height>31</height>
       </rect>
      </property>
      <property name="currentIndex">
@@ -118,7 +118,7 @@
          <x>0</x>
          <y>0</y>
          <width>221</width>
-         <height>71</height>
+         <height>22</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout_4">
@@ -130,7 +130,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="spin_min_voltage" name="doubleSpinBox_5">
+         <widget class="QDoubleSpinBox" name="spin_min_voltage">
           <property name="decimals">
            <number>6</number>
           </property>
@@ -148,8 +148,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>221</width>
-         <height>103</height>
+         <width>211</width>
+         <height>22</height>
         </rect>
        </property>
        <layout class="QFormLayout" name="formLayout">
@@ -161,7 +161,7 @@
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="spin_group_len" name="spin_group_len">
+         <widget class="QDoubleSpinBox" name="spin_group_len">
           <property name="decimals">
            <number>6</number>
           </property>
@@ -170,64 +170,52 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>Min peak height</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="spin_min_peakheight" name="spin_min_peakheight">
-          <property name="decimals">
-           <number>6</number>
-          </property>
-          <property name="value">
-           <double>0.000400000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>Min peak prominence</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="spin_min_peakprominence" name="spin_min_peakprominence">
-          <property name="decimals">
-           <number>6</number>
-          </property>
-          <property name="value">
-           <double>0.001200000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>Moving average size</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="spin_moving_average_denom" name="spin_moving_average_denom">
-          <property name="value">
-           <number>20</number>
-          </property>
-         </widget>
-        </item>
        </layout>
       </widget>
      </widget>
     </widget>
+    <widget class="QComboBox" name="combo_grouping_algo">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>221</width>
+       <height>19</height>
+      </rect>
+     </property>
+     <item>
+      <property name="text">
+       <string>VThreshold (Voltage column required)</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>SpacedGroups</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QCheckBox" name="check_skip_groups">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>221</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Every other group (MIRRORED)</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
-   <widget class="correlate_button" name="compute_button">
+   <widget class="QPushButton" name="correlate_button">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>220</y>
+      <y>240</y>
       <width>151</width>
       <height>28</height>
      </rect>
@@ -248,9 +236,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
+      <y>340</y>
       <width>241</width>
-      <height>171</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="font">
@@ -267,9 +255,9 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>80</y>
+       <y>90</y>
        <width>221</width>
-       <height>89</height>
+       <height>83</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="formLayout_3">
@@ -317,22 +305,22 @@
       </item>
      </layout>
     </widget>
-    <widget class="equation_view" name="graphicsView">
+    <widget class="QGraphicsView" name="equation_view">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>20</y>
        <width>221</width>
-       <height>51</height>
+       <height>61</height>
       </rect>
      </property>
     </widget>
    </widget>
-   <widget class="fit_button" name="compute_button_2">
+   <widget class="QPushButton" name="fit_button">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>500</y>
+      <y>530</y>
       <width>151</width>
       <height>28</height>
      </rect>
@@ -349,51 +337,11 @@
      <string>Fit</string>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>241</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="title">
-     <string>Grouping Algorithm</string>
-    </property>
-    <widget class="combo_grouping_algo" name="comboBox">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>221</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <item>
-      <property name="text">
-       <string>VThreshold (V column required)</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>SpacedGroups</string>
-      </property>
-     </item>
-    </widget>
-   </widget>
    <widget class="QGroupBox" name="groupBox_4">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>260</y>
+      <y>280</y>
       <width>241</width>
       <height>51</height>
      </rect>
@@ -406,7 +354,7 @@
      </font>
     </property>
     <property name="title">
-     <string>Peak Isolation Config</string>
+     <string>Peak Isolation Config (timescale: ticks)</string>
     </property>
     <property name="checkable">
      <bool>false</bool>
@@ -424,14 +372,100 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>Individual Peak Range</string>
+         <string>Overlapped Peak Range</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_4">
+       <widget class="QSpinBox" name="spin_peak_overlap">
+        <property name="maximum">
+         <number>100000</number>
+        </property>
+        <property name="singleStep">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>5000</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>241</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Peak Detection Config</string>
+    </property>
+    <widget class="QWidget" name="formLayoutWidget_5">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>221</width>
+       <height>76</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="formLayout_5">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Min peak height</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QDoubleSpinBox" name="spin_min_peakheight">
         <property name="decimals">
          <number>6</number>
+        </property>
+        <property name="value">
+         <double>0.000400000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Min peak prominence</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDoubleSpinBox" name="spin_min_peakprominence">
+        <property name="decimals">
+         <number>6</number>
+        </property>
+        <property name="value">
+         <double>0.001200000000000</double>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Moving average size</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QSpinBox" name="spin_moving_average_denom">
+        <property name="value">
+         <number>20</number>
         </property>
        </widget>
       </item>
@@ -448,15 +482,22 @@
      <height>26</height>
     </rect>
    </property>
-   <widget class="file_menu" name="menuFile">
+   <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionOpen_CSV_File"/>
+    <addaction name="actionOpen_MATLAB_File"/>
+    <addaction name="separator"/>
+    <addaction name="actionExport_Binary"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit_2"/>
    </widget>
-   <widget class="help_menu" name="menuhelp">
+   <widget class="QMenu" name="menuhelp">
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionGithub_Repository"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuhelp"/>
@@ -493,92 +534,56 @@
     <string>Open LabView File</string>
    </property>
   </action>
+  <action name="actionOpen_CSV_File">
+   <property name="text">
+    <string>Open CSV File</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionQuit_2">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+  </action>
+  <action name="actionExport_Binary">
+   <property name="text">
+    <string>Export Binary</string>
+   </property>
+  </action>
+  <action name="actionOpen_MATLAB_File">
+   <property name="text">
+    <string>Open LabView Data</string>
+   </property>
+  </action>
+  <action name="actionGithub_Repository">
+   <property name="text">
+    <string>Github Repository</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>spin_group_len</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>spin_min_peakheight</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>spin_min_peakprominence</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>spin_moving_average_denom</class>
-   <extends>QSpinBox</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>correlate_button</class>
-   <extends>QPushButton</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>equation_view</class>
-   <extends>QGraphicsView</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>fit_button</class>
-   <extends>QPushButton</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>rawdata_graph</class>
+   <class>RawDataGraph</class>
    <extends>QWidget</extends>
    <header>widgets</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>peaks_graph</class>
+   <class>PeaksGraph</class>
    <extends>QWidget</extends>
    <header>widgets</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>timeconstant_graph</class>
+   <class>TimeConstantGraph</class>
    <extends>QWidget</extends>
    <header>widgets</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>combo_grouping_algo</class>
-   <extends>QComboBox</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>file_menu</class>
-   <extends>QMenu</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>help_menu</class>
-   <extends>QMenu</extends>
-   <header>widgets</header>
-  </customwidget>
-  <customwidget>
-   <class>graph_tab</class>
-   <extends>QTabWidget</extends>
-   <header>widgets</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>config_area</class>
-   <extends>QStackedWidget</extends>
-   <header>widgets</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>spin_min_voltage</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>widgets</header>
   </customwidget>
  </customwidgets>
  <resources/>
