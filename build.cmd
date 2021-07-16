@@ -1,13 +1,15 @@
-echo WARNING: THIS WILL OVERWRITE app.py WITH A CONVERTED VERSION OF THE .UI FILE.
+@echo off
 
-set /p INPUT=Continue? [y/n]
+set compileUI=0
+set build=0
 
-If %INPUT%=="y" goto yes 
-If %INPUT%=="n" goto no
+FOR %%A IN (%*) DO (
+    IF "%%A"=="-compileUI" set compileUI=1
+    IF "%%A"=="-build" set build=1
+)
 
-:yes
-pyuic5.exe -x .\app.ui -o app.py
-exit
+if %compileUI%==1 pyuic5.exe -x .\ui\mainwin.ui -o mainwin.py
 
-:no
+if %build%==1 pyinstaller --onefile --windowed --icon=favicon.ico app.py 
+
 exit
