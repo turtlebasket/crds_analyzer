@@ -8,7 +8,10 @@ def spaced_groups(
     group_len: float,
     peak_minheight: float,
     peak_prominence: float,
-    sma_denom: int
+    sma_denom: int,
+    mirrored: bool=True,
+    start=None,
+    end=None
 ):
     """
     Use SpacedGroups algo to separate groups
@@ -32,8 +35,22 @@ def spaced_groups(
     def isolate_group(i):
         i_min = i - t2i_range(group_len)
         i_max = i + t2i_range(group_len)
-        return y_data.tolist()[i_min:i_max]
-    
+        # NOTE: Groups that are too short just get left out. Too bad!
+        group = y_data.tolist()[i_min:i_max]
+        return group
+
+    # Check if custom start & end values are set
+
+    if not end == None:
+        stop_ind = t2i(end)
+        x_data = x_data[:stop_ind]
+        y_data = y_data[:stop_ind]
+
+    if not start == None:
+        start_ind = t2i(start)
+        x_data = x_data[start_ind:]
+        y_data = y_data[start_ind:]
+
     # Detect peaks w/ averaged data
     x_data_av = np.delete(x_data, [range(int(sma_denom / 2))])
     x_data_av = np.delete(x_data_av, [range(len(x_data)-int((sma_denom / 2) - 1), len(x_data_av))])
@@ -51,10 +68,8 @@ def spaced_groups(
     for i in range(len(peaks)):
         item = peaks[i]
         next_item = 0
-        prev_item = item-10
         try:
             next_item = peaks[i+1]
-            prev_item = peaks[i-1]
         except:
             pass
 
@@ -75,14 +90,22 @@ def spaced_groups(
 
     # Isolate group data
 
-    groups_raw = [] # NOTE: Only contains every other group
+    groups_raw = [] 
     for p in peaks_init:
-        if peaks_init.index(p) % 2 == 0:
-            groups_raw.append(isolate_group(t2i(p)))
+        if mirrored:
+            if peaks_init.index(p) % 2 == 0:
+                groups_raw.append(isolate_group(t2i(p)))
+            else:
+                pass
         else:
-            pass
-    
+            groups_raw.append(isolate_group(t2i(p)))
+
+    for i in groups_raw:
+        if len(i) == 0:
+            groups_raw.remove(i)
+
     return groups_raw
+
 
 def correlate_groups(groups_raw):
     """
@@ -95,7 +118,7 @@ def correlate_groups(groups_raw):
 
     group_base = np.array(groups_raw[0])
     groups_adjusted = [group_base]
-    for x in groups_raw[1:len(groups_raw)-1]:
+    for x in groups_raw[1:]:
         # calculate how much to shift
         corr = correlate(group_base, np.array(x))
         shift = corr.tolist().index(max(corr))

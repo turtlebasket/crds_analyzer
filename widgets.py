@@ -41,6 +41,10 @@ class BaseGraph(QtWidgets.QWidget):
         self.canv.draw()
         print("attempted plot")
 
+    def clear(self):
+        self.canv.axes.clear()
+        self.canv.draw()
+
 class RawDataGraph(BaseGraph):
     pass
 

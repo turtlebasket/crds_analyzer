@@ -17,8 +17,6 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super(AppWindow, self).__init__()
         self.setupUi(self)
 
-        # Signals
-
         # Graphing actions
 
         self.csv_selected.connect(self.raw_data_graph.plot)
@@ -58,6 +56,10 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 mem['v_data'] = data.transpose()[2]
             except IndexError:
                 display_warning('No voltage column detected. VThreshold algo will not work.')
+
+            self.groups_graph.clear()
+            self.tau_graph.clear()
+            self.graph_tabs.setCurrentIndex(0)
             self.csv_selected.emit()
 
 
@@ -68,6 +70,26 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         # Inputs
 
+        def switch_grouping_algo():
+            algo = self.combo_grouping_algo.currentIndex()
+            self.grouping_config_area.setCurrentIndex(algo)
+        self.combo_grouping_algo.currentIndexChanged.connect(switch_grouping_algo)
+
+        def set_start_time():
+            if self.check_custom_start.isChecked():
+                self.spin_start_time.setDisabled(False)
+            else:
+                self.spin_start_time.setDisabled(True)
+        self.check_custom_start.stateChanged.connect(set_start_time)
+
+        def set_end_time():
+            if self.check_custom_end.isChecked():
+                self.spin_end_time.setDisabled(False)
+            else:
+                # mem['end_time'] = self.spin_end_time.value()
+                self.spin_end_time.setDisabled(True)
+        self.check_custom_end.stateChanged.connect(set_end_time)
+
         def init_correlate():
             groups_raw = None
             algo = self.combo_grouping_algo.currentIndex()
@@ -76,14 +98,20 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                     display_error('VThreshold not yet implemented.')
                     return
                 elif algo == 1:
-                    groups_raw = crds_calc.spaced_groups(
-                        mem['x_data'],
-                        mem['y_data'],
-                        self.spin_group_len.value(),
-                        self.spin_min_peakheight.value(),
-                        self.spin_min_peakprominence.value(),
-                        self.spin_moving_average_denom.value()
-                    )
+                    try:
+                        groups_raw = crds_calc.spaced_groups(
+                            mem['x_data'],
+                            mem['y_data'],
+                            self.spin_group_len.value(),
+                            self.spin_min_peakheight.value(),
+                            self.spin_min_peakprominence.value(),
+                            self.spin_moving_average_denom.value(),
+                            mirrored=False if self.check_skip_groups.checkState() == 0 else True,
+                            start=self.spin_start_time.value() if self.check_custom_start.isChecked() else None,
+                            end=self.spin_end_time.value() if self.check_custom_end.isChecked() else None
+                        )
+                    except (ValueError, TypeError):
+                        display_error('Failed to correlate. This could be because no groups are being detected.')
 
                 mem['groups_correlated'] = crds_calc.correlate_groups(groups_raw)
                 self.correlation_complete.emit()
