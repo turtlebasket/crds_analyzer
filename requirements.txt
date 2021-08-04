@@ -3,3 +3,5 @@ pandas
 numpy
 pyinstaller==4.4
 sqlitedict
+scipy
+varname

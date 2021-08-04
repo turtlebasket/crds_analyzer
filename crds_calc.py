@@ -1,6 +1,13 @@
 import numpy as np
 from scipy.signal import find_peaks, correlate
+from scipy.optimize import curve_fit
 from memdb import mem
+
+def minmax(data):
+    return np.min(data), np.max(data)
+
+def exp_func(x, x0, a, y0, tau): # NOTE: X is not something we pass in 🤦‍♂️
+    return y0 + a*np.exp(-(x-x0)/tau)
 
 def spaced_groups(
     x_data: np.array,
@@ -16,7 +23,9 @@ def spaced_groups(
     """
     Use SpacedGroups algo to separate groups
 
-    Returns 2D array of raw data; every other group
+    Returns
+    -------
+    2D array of raw data; every other group
     """
 
     # Helpers
@@ -107,11 +116,44 @@ def spaced_groups(
     return groups_raw
 
 
+def vthreshold(
+    x_data: np.array,
+    y_data: np.array,
+    v_data: np.array,
+    vmin: float,
+    vmax: float,
+    mirrored: bool=True,
+    start=None,
+    end=None
+):
+    """
+    Voltage-threshold grouping algorithm
+
+    Returns
+    -------
+    A `list` of all peak groups
+    """
+
+    # Helpers
+    def t2i(t):
+        delta_t = abs(x_data[0] - t)
+        timestep = abs(x_data[1] - x_data[0])
+        return int(delta_t / timestep)
+
+    def t2i_range(t):
+        timestep = abs(x_data[1] - x_data[0])
+        return int(t / timestep)
+
+    groups_raw = []
+    return groups_raw
+
 def correlate_groups(groups_raw):
     """
     Overlay groups using `scipy.correlate`.
 
-    Returns 2D array of overlayed groups
+    Returns
+    -------
+    2D array of overlayed groups
     """
 
     # Compare groups (scipy correlate)
@@ -135,19 +177,121 @@ def correlate_groups(groups_raw):
 
     return groups_adjusted
 
+def add_peaks_only(groups_adjusted: list):
+
+    def unequal_add_truncation(a,b): # Instead of padding with 0, truncate
+        if len(a) < len(b):
+            c = b.copy()
+            c = c[:len(a)]
+            c += a
+        else:
+            c = a.copy()
+            c = c[:len(b)]
+            c += b
+        return(c)
+
+    added_peaks = np.array(groups_adjusted[0])
+
+    for g in groups_adjusted[1:]:
+        g1 = np.array(g)
+        g0 = added_peaks
+        added_peaks = unequal_add_truncation(g0, g1)
+
+    return added_peaks
+
 def isolate_peaks(
+    groups_adjusted: list,
     peak_width: int, 
-    groups_adjusted: list, 
-    peak_minheight: int,
-    peak_prominence: int,
-    sma_denom: int
+    sma_denom: int,
+    peak_minheight: int = None,
+    peak_prominence: int = None,
+    shift_over: int = 0
 ):
+
+    def unequal_add(a,b): # NOTE: See https://www.delftstack.com/howto/numpy/vector-addition-in-numpy/
+        if len(a) < len(b):
+            c = b.copy()
+            c[:len(a)] += a
+        else:
+            c = a.copy()
+            c[:len(b)] += b
+        return(c)
+
+    def unequal_add_truncation(a,b): # Instead of padding with 0, truncate
+        if len(a) < len(b):
+            c = b.copy()
+            c = c[:len(a)]
+            c += a
+        else:
+            c = a.copy()
+            c = c[:len(b)]
+            c += b
+        return(c)
 
     def moving_average(x, w):
         return np.convolve(x, np.ones(w), 'valid') / w
 
-    group_peaks = []
+    added_peaks = np.array(groups_adjusted[0])
+
+    for g in groups_adjusted[1:]:
+        g1 = np.array(g)
+        g0 = added_peaks
+        added_peaks = unequal_add_truncation(g0, g1)
+
+    added_peaks_av = moving_average(added_peaks, sma_denom)
+    peak_indices = find_peaks(added_peaks_av, height=peak_minheight, prominence=peak_prominence, distance=peak_width/2)[0] # Get indices of all peaks
+
+    isolated_peaks = []
+    delta = peak_width/2
+
     for g in groups_adjusted:
-        y_data_av = moving_average(g, sma_denom)
-        peak_indices = find_peaks(y_data_av, height=peak_minheight, prominence=peak_prominence) # Get indices of all peaks
-        group_peaks.append(peak_indices)
+        peaks_cut = []
+        for i in peak_indices:
+            peak = g[int(i-delta+shift_over):int(i+delta+shift_over)]
+            peaks_cut.append(peak)
+        isolated_peaks.append(peaks_cut)
+
+    return added_peaks, peak_indices, isolated_peaks
+
+
+def fit_peaks(
+    isolated_peaks: list,
+    peak_indices: list,
+    min_peak_height: float,
+    min_peak_prominence: float,
+    moving_avg_size: int,
+    a: float,
+    tau: float,
+    y0: float,
+    shift_over: int,
+    use_advanced: bool
+):
+    
+    print(f'{use_advanced=}')
+
+    """
+    Returns
+    -------
+    Peak fit equations. Linked to `mem['isolated_peaks']`.
+    """
+
+    params_guess = (0.0000, a, y0, tau)
+    equations = []
+    for peaks_cut in isolated_peaks:
+        row = []
+        for peak_data in peaks_cut:
+            x_data = np.arange(len(peak_data)) # just placeholder indices
+            if not use_advanced:
+                peak_index = np.argmax(peak_data, axis=0)
+            else:
+                peak_index = find_peaks(peak_data, height=min_peak_height, prominence=min_peak_prominence)[0][0]
+            # print(peak_index)
+            params_guess = (peak_index+shift_over, a, y0, tau)
+            x_data_target = x_data[peak_index+shift_over:]
+            peak_data_target = peak_data[peak_index+shift_over:]
+            # popt, pcov = curve_fit(exp_func, x_data_target, peak_data_target, bounds=([-np.inf, 0.0, -np.inf, 0.0], np.inf))
+            popt, pcov = curve_fit(exp_func, x_data_target, peak_data_target, bounds=([-np.inf, 0.0, -np.inf, 0.0], np.inf), p0=params_guess, maxfev=10000000)
+            row.append({'popt': popt, 'pcov': pcov})
+        equations.append(row)
+
+    return equations # list linked with isolated_peaks
