@@ -91,42 +91,73 @@ class AddedPeaksGraph(BaseGraph):
         if not self.params['peak_width'] == None: # plot peak indices
             for i in mem['peak_indices']: 
                 self.canv.axes.axvspan(int(i-self.params['peak_width']/2+self.params['shift_over']), int(i+self.params['peak_width']/2+self.params['shift_over']), color='red', alpha=0.4)
-
-class FitsGraph(BaseGraph):
-    
+                
+class FitGraph(BaseGraph):
     def __init__(self, x):
-        super(FitsGraph, self).__init__(x)
+        super().__init__(x)
+        
+    def set_peak_index(self, i):
+        self.peak_index = i
         
     def plot_data(self):
-        
         for g_i in range(len(mem['isolated_peaks'])):
-            for p_i in range(len(mem['isolated_peaks'][g_i])):
-                peak = mem['isolated_peaks'][g_i][p_i]
-                x_data = np.arange(len(peak))
-                popt = mem['fit_equations'][g_i][p_i]['popt']
-                self.canv.axes.plot(peak)
-                self.canv.axes.plot(x_data, exp_func(x_data, *popt), color='red')
+            peak = mem['isolated_peaks'][g_i][self.peak_index]
+            x_data = np.arange(len(peak))
+            popt = mem['fit_equations'][g_i][self.peak_index]['popt']
+            self.canv.axes.plot(peak)
+            self.canv.axes.plot(x_data, exp_func(x_data, *popt), color='red')
+
+class FitsGraphViewer(QtWidgets.QTabWidget):
+    def __init__(self, x):
+        super(FitsGraphViewer, self).__init__(x)
+        layout = QtWidgets.QGridLayout()
+        self.setLayout(layout)
+
+    def plot(self): # Create tabs & plot ALL data (each individual graph)
+        self.clear()
+
+        for p_i in range(len(mem['isolated_peaks'][0])):
+            tab_name = str(p_i+1)
+            fit_graph = FitGraph(self)
+            fit_graph.set_peak_index(p_i)
+            self.addTab(fit_graph, tab_name)
+            fit_graph.plot()
+
+# class FitsGraph(BaseGraph):
     
-    # def plot_data(self):
-
-    #     try:
-    #         self.canv.axes.remove()
-    #     except AttributeError:
-    #         pass
-
-    #     subplots_stacked = len(mem['isolated_peaks'][0]) # should all be same length
-    #     axes = self.canv.figure.subplots(subplots_stacked, 1, sharex=True)
+#     def __init__(self, x):
+#         super(FitsGraph, self).__init__(x)
         
-    #     for g_i in range(len(mem['isolated_peaks'])):
-    #         for p_i in range(subplots_stacked):
-    #             peak = mem['isolated_peaks'][g_i][p_i]
-    #             axes[p_i].plot(peak)
-    #             x_data = np.arange(len(peak))
-    #             popt = mem['fit_equations'][g_i][p_i]['popt']
-    #             axes[p_i].plot(x_data, exp_func(x_data, *popt), color='red')
+#     # def plot_data(self):
+        
+#     #     for g_i in range(len(mem['isolated_peaks'])):
+#     #         for p_i in range(len(mem['isolated_peaks'][g_i])):
+#     #             peak = mem['isolated_peaks'][g_i][p_i]
+#     #             x_data = np.arange(len(peak))
+#     #             popt = mem['fit_equations'][g_i][p_i]['popt']
+#     #             self.canv.axes.plot(peak)
+#     #             self.canv.axes.plot(x_data, exp_func(x_data, *popt), color='red')
+    
+#     def plot_data(self):
 
-        # for ax in axs.flat:
-        #     ax.set(xlabel='x-label', ylabel='y-label')
+#         try:
+#             self.canv.axes.remove()
+#         except AttributeError:
+#             pass
+
+#         subplots_stacked = len(mem['isolated_peaks'][0]) # should all be same length
+#         axes = self.canv.figure.subplots(subplots_stacked, 1, sharex=True)
+        
+#         for g_i in range(len(mem['isolated_peaks'])):
+#             for p_i in range(subplots_stacked):
+#                 peak = mem['isolated_peaks'][g_i][p_i]
+#                 axes[p_i].plot(peak)
+#                 # x_data = np.arange(len(peak))
+#                 # popt = mem['fit_equations'][g_i][p_i]['popt']
+#                 # axes[p_i].plot(x_data, exp_func(x_data, *popt), color='red')
+
+#         # for ax in axs.flat:
+#         #     ax.set(xlabel='x-label', ylabel='y-label')
 
 class TimeConstantGraph(BaseGraph):
     pass

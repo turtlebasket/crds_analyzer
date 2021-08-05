@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1343</width>
-    <height>907</height>
+    <height>746</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,8 +40,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>278</width>
-         <height>846</height>
+         <width>261</width>
+         <height>812</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -794,7 +794,11 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
         <item row="0" column="0">
-         <widget class="FitsGraph" name="peak_fits_graph" native="true"/>
+         <widget class="FitsGraphViewer" name="peak_fit_viewer">
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -829,7 +833,7 @@
              <x>0</x>
              <y>0</y>
              <width>279</width>
-             <height>802</height>
+             <height>641</height>
             </rect>
            </property>
            <widget class="QGroupBox" name="groupBox_3">
@@ -1022,12 +1026,6 @@ p, li { white-space: pre-wrap; }
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>FitsGraph</class>
-   <extends>QWidget</extends>
-   <header>widgets</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>AddedPeaksGraph</class>
    <extends>QWidget</extends>
    <header>widgets</header>
@@ -1036,6 +1034,12 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>VoltageGraph</class>
    <extends>QWidget</extends>
+   <header>widgets</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FitsGraphViewer</class>
+   <extends>QTabWidget</extends>
    <header>widgets</header>
    <container>1</container>
   </customwidget>

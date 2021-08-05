@@ -203,7 +203,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.check_advanced_peak_detection.isChecked()
             )
             # print(mem['fit_equations'])
-            self.peak_fits_graph.plot()
+            self.peak_fit_viewer.plot()
             self.graph_tabs.setCurrentIndex(4)
         self.fit_button.pressed.connect(init_fit)
 
