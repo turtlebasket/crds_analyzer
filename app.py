@@ -204,6 +204,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             )
             # print(mem['fit_equations'])
             self.peak_fits_graph.plot()
+            self.graph_tabs.setCurrentIndex(4)
         self.fit_button.pressed.connect(init_fit)
 
         # Show equation
