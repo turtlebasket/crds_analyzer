@@ -94,6 +94,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.spin_end_time.setDisabled(True)
         self.check_custom_end.stateChanged.connect(set_end_time)
 
+
         # Sync up peak detection settings between input locations
         self.spin_min_peakheight.valueChanged.connect(lambda x: self.spin_min_peakheight_2.setValue(x))
         self.spin_min_peakheight_2.valueChanged.connect(lambda x: self.spin_min_peakheight.setValue(x))
@@ -202,6 +203,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.spin_shift_over_fit.value(),
                 self.check_advanced_peak_detection.isChecked()
             )
+            mem['shift_over_fit'] = self.spin_shift_over_fit.value()
             # print(mem['fit_equations'])
             self.peak_fit_viewer.plot()
             self.graph_tabs.setCurrentIndex(4)

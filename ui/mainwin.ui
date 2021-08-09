@@ -39,9 +39,9 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
+         <y>-158</y>
          <width>261</width>
-         <height>812</height>
+         <height>818</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -141,8 +141,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>221</width>
-               <height>108</height>
+               <width>222</width>
+               <height>101</height>
               </rect>
              </property>
              <layout class="QFormLayout" name="formLayout">
@@ -268,8 +268,8 @@
             <rect>
              <x>10</x>
              <y>160</y>
-             <width>230</width>
-             <height>52</height>
+             <width>235</width>
+             <height>53</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="formLayout_5">
@@ -371,7 +371,7 @@
              <x>9</x>
              <y>20</y>
              <width>221</width>
-             <height>108</height>
+             <height>111</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="formLayout_2">
@@ -531,7 +531,7 @@
              <x>10</x>
              <y>90</y>
              <width>221</width>
-             <height>106</height>
+             <height>111</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="formLayout_3">
@@ -539,19 +539,6 @@
              <widget class="QLabel" name="label_14">
               <property name="text">
                <string>τ value</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="spin_var_tau">
-              <property name="suffix">
-               <string/>
-              </property>
-              <property name="decimals">
-               <number>8</number>
-              </property>
-              <property name="value">
-               <double>0.000002000000000</double>
               </property>
              </widget>
             </item>
@@ -582,7 +569,7 @@
                <number>6</number>
               </property>
               <property name="value">
-               <double>1.000500000000000</double>
+               <double>0.000500000000000</double>
               </property>
              </widget>
             </item>
@@ -600,6 +587,16 @@
               </property>
               <property name="value">
                <number>40</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QSpinBox" name="spin_var_tau">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+              <property name="value">
+               <number>150</number>
               </property>
              </widget>
             </item>
@@ -641,8 +638,8 @@
             <rect>
              <x>10</x>
              <y>260</y>
-             <width>221</width>
-             <height>81</height>
+             <width>222</width>
+             <height>82</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="formLayout_6">
@@ -833,7 +830,7 @@
              <x>0</x>
              <y>0</y>
              <width>279</width>
-             <height>641</height>
+             <height>633</height>
             </rect>
            </property>
            <widget class="QGroupBox" name="groupBox_3">

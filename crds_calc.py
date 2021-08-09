@@ -267,8 +267,6 @@ def fit_peaks(
     use_advanced: bool
 ):
     
-    print(f'{use_advanced=}')
-
     """
     Returns
     -------
@@ -277,8 +275,10 @@ def fit_peaks(
 
     params_guess = (0.0000, a, y0, tau)
     equations = []
+    overlayed_peak_indices = []
     for peaks_cut in isolated_peaks:
-        row = []
+        equation_row = []
+        overlayed_peak_row = []
         for peak_data in peaks_cut:
             x_data = np.arange(len(peak_data)) # just placeholder indices
             if not use_advanced:
@@ -291,7 +291,31 @@ def fit_peaks(
             peak_data_target = peak_data[peak_index+shift_over:]
             # popt, pcov = curve_fit(exp_func, x_data_target, peak_data_target, bounds=([-np.inf, 0.0, -np.inf, 0.0], np.inf))
             popt, pcov = curve_fit(exp_func, x_data_target, peak_data_target, bounds=([-np.inf, 0.0, -np.inf, 0.0], np.inf), p0=params_guess, maxfev=10000000)
-            row.append({'popt': popt, 'pcov': pcov})
-        equations.append(row)
+            equation_row.append({'popt': popt, 'pcov': pcov})
+            overlayed_peak_row.append(peak_index)
+        equations.append(equation_row)
+        overlayed_peak_indices.append(overlayed_peak_row)
+        mem['overlayed_peak_indices'] = overlayed_peak_indices
 
     return equations # list linked with isolated_peaks
+
+
+def get_tau_data(equation_data):
+    """
+    Extracts time constant from all equations (2d array)
+    
+    Returns
+    -------
+
+    Tau data in same dimensions as `equation_data`
+    """
+    
+    tau_data = []
+    for r in equation_data:
+        row = []
+        for e in r:
+            tau = e['popt'][3]
+            row.append(tau)
+        equation_data.append(row)
+
+    return tau_data

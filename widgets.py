@@ -103,9 +103,10 @@ class FitGraph(BaseGraph):
         for g_i in range(len(mem['isolated_peaks'])):
             peak = mem['isolated_peaks'][g_i][self.peak_index]
             x_data = np.arange(len(peak))
+            x_data_target = x_data[mem['overlayed_peak_indices'][g_i][self.peak_index]+mem['shift_over_fit']:]
             popt = mem['fit_equations'][g_i][self.peak_index]['popt']
             self.canv.axes.plot(peak)
-            self.canv.axes.plot(x_data, exp_func(x_data, *popt), color='red')
+            self.canv.axes.plot(x_data_target, exp_func(x_data_target, *popt), color='red')
 
 class FitsGraphViewer(QtWidgets.QTabWidget):
     def __init__(self, x):
