@@ -4,7 +4,9 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg, NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
-from memdb import mem
+from matplotlib import colors
+from matplotlib import pyplot as plt
+from db import mem
 from crds_calc import exp_func
 
 class MplCanvas(FigureCanvasQTAgg):
@@ -161,4 +163,32 @@ class FitsGraphViewer(QtWidgets.QTabWidget):
 #         #     ax.set(xlabel='x-label', ylabel='y-label')
 
 class TimeConstantGraph(BaseGraph):
-    pass
+
+    def __init__(self, x):
+        super().__init__(x)
+        self.peak_index = 0
+    
+    def set_peak_index(self, i):
+        self.peak_index = i
+
+    def plot_data(self):
+        data = []
+        for g_i in range(len(mem['time_constants'])):
+            data.append(mem['time_constants'][g_i][self.peak_index])
+        self.canv.axes.hist(data, bins='auto', alpha=0.8)
+
+class TimeConstantGraphsViewer(QtWidgets.QTabWidget):
+    def __init__(self, x):
+        super(TimeConstantGraphsViewer, self).__init__(x)
+        layout = QtWidgets.QGridLayout()
+        self.setLayout(layout)
+
+    def plot(self): # Create tabs & plot ALL data (each individual graph)
+        self.clear()
+
+        for p_i in range(len(mem['time_constants'][0])):
+            tab_name = str(p_i+1)
+            tau_graph = TimeConstantGraph(self)
+            tau_graph.set_peak_index(p_i)
+            self.addTab(tau_graph, tab_name)
+            tau_graph.plot()

@@ -2,15 +2,12 @@ import sys
 import crds_calc
 from pandas import read_csv
 from PyQt5 import QtGui, QtWidgets, QtCore
-from memdb import mem
+from db import mem
 from mainwin import Ui_MainWindow
 from widgets import BaseGraph
 import pathlib
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
-
-    correlation_complete = QtCore.pyqtSignal()
-    fitting_complete = QtCore.pyqtSignal()
 
     def __init__(self):
         super(AppWindow, self).__init__()
@@ -43,7 +40,9 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 return
             mem['x_data'] = data.transpose()[0]
             mem['y_data'] = data.transpose()[1]
-            mem['timestep'] = mem['x_data'][1] - mem['x_data'][0]
+            timestep = mem['x_data'][1] - mem['x_data'][0]
+            mem['timestep'] = timestep
+            self.spin_timestep.setValue(timestep)
             self.raw_data_graph.plot() # Graph new stuff
 
             # self.groups_graph.clear() # Clear old stuff
@@ -206,7 +205,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             mem['shift_over_fit'] = self.spin_shift_over_fit.value()
             # print(mem['fit_equations'])
             self.peak_fit_viewer.plot()
-            self.graph_tabs.setCurrentIndex(4)
+
+            mem['time_constants'] = crds_calc.get_time_constants(mem['fit_equations'])
+            self.tau_viewer.plot()
+
+            self.graph_tabs.setCurrentIndex(5)
         self.fit_button.pressed.connect(init_fit)
 
         # Show equation
