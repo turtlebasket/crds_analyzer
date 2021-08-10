@@ -1,5 +1,6 @@
 PyQt5
 pandas
+matplotlib
 numpy
 pyinstaller==4.4
 sqlitedict

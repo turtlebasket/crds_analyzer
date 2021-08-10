@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.signal import find_peaks, correlate
 from scipy.optimize import curve_fit
-from memdb import mem
+from db import mem
 
 def minmax(data):
     return np.min(data), np.max(data)
@@ -281,6 +281,7 @@ def fit_peaks(
         overlayed_peak_row = []
         for peak_data in peaks_cut:
             x_data = np.arange(len(peak_data)) # just placeholder indices
+            # x_data = np.arange(0, len(peak_data)*mem['timestep'], mem['timestep'])
             if not use_advanced:
                 peak_index = np.argmax(peak_data, axis=0)
             else:
@@ -289,7 +290,6 @@ def fit_peaks(
             params_guess = (peak_index+shift_over, a, y0, tau)
             x_data_target = x_data[peak_index+shift_over:]
             peak_data_target = peak_data[peak_index+shift_over:]
-            # popt, pcov = curve_fit(exp_func, x_data_target, peak_data_target, bounds=([-np.inf, 0.0, -np.inf, 0.0], np.inf))
             popt, pcov = curve_fit(exp_func, x_data_target, peak_data_target, bounds=([-np.inf, 0.0, -np.inf, 0.0], np.inf), p0=params_guess, maxfev=10000000)
             equation_row.append({'popt': popt, 'pcov': pcov})
             overlayed_peak_row.append(peak_index)
@@ -300,9 +300,9 @@ def fit_peaks(
     return equations # list linked with isolated_peaks
 
 
-def get_tau_data(equation_data):
+def get_time_constants(equation_data):
     """
-    Extracts time constant from all equations (2d array)
+    Extracts time constant from all fit-output equations (2d array)
     
     Returns
     -------
@@ -316,6 +316,8 @@ def get_tau_data(equation_data):
         for e in r:
             tau = e['popt'][3]
             row.append(tau)
-        equation_data.append(row)
+        tau_data.append(row)
+
+    print(tau_data)
 
     return tau_data

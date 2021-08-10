@@ -140,3 +140,4 @@ cython_debug/
 # Local stuff to exclude
 .vscode/
 mainwin.py
+*.sqlite

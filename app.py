@@ -6,12 +6,26 @@ from db import mem
 from mainwin import Ui_MainWindow
 from widgets import BaseGraph
 import pathlib
+from re import search as re_search
+from varname.core import nameof
+from hashlib import md5
+from sqlitedict import SqliteDict
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self):
         super(AppWindow, self).__init__()
         self.setupUi(self)
+
+        # Define syncables
+        synced_value_widgets = []
+        synced_check_widgets = []
+        for wname in vars(self):
+            w = vars(self).get(wname)
+            if re_search(r"^spin\_(.*)$", wname) != None:
+                synced_value_widgets.append(w)
+            elif re_search(r"^check\_(.*)$", wname) != None:
+                synced_check_widgets.append(w)
 
         # Helpers
 
@@ -40,9 +54,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 return
             mem['x_data'] = data.transpose()[0]
             mem['y_data'] = data.transpose()[1]
-            timestep = mem['x_data'][1] - mem['x_data'][0]
+            # timestep = mem['x_data'][1] - mem['x_data'][0]
+            timestep = (mem['x_data'][-1] - mem['x_data'][0]) / len(mem['x_data'])
             mem['timestep'] = timestep
             self.spin_timestep.setValue(timestep)
+            print(timestep)
             self.raw_data_graph.plot() # Graph new stuff
 
             # self.groups_graph.clear() # Clear old stuff
@@ -61,6 +77,37 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.voltage.setVisible(False)
                 self.graph_tabs.setCurrentIndex(0)
 
+            # Load from persistent storage & bind write actions
+
+            # path_hash = md5(filename.encode('utf-8')).hexdigest()
+
+            # def set_value(name, val):
+            #     with SqliteDict(f"./db/{path_hash}.sqlite", autocommit=True) as storage:
+            #         print(f"Change {name} to {val}.")
+            #         storage[name] = val
+            #         print(f"Check: {storage[name]}")
+
+            # with SqliteDict(f"./db/{path_hash}.sqlite", autocommit=True) as storage:
+
+            #     for w in synced_value_widgets:
+            #         name = w.objectName()
+            #         try:
+            #             w.setValue(bool(storage[name]))
+            #             print(f"Loaded {name}.")
+            #         except KeyError:
+            #             print(f"Failed to load object {name}.")
+            #             pass
+            #         w.valueChanged.connect(lambda x: set_value(name, x))
+
+            #     for w in synced_check_widgets:
+            #         name = w.objectName()
+            #         try:
+            #             w.setChecked(storage[name])
+            #             print(f"Loaded {name}.")
+            #         except KeyError:
+            #             print(f"Failed to load object {name}.")
+            #             pass
+            #         w.stateChanged.connect(lambda: set_value(name, w.isChecked()))
 
         # Universal Actions stuff
 
