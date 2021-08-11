@@ -10,6 +10,8 @@ from re import search as re_search
 from varname.core import nameof
 from hashlib import md5
 from sqlitedict import SqliteDict
+from pprint import PrettyPrinter
+import numpy as np
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -259,6 +261,21 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             mem['time_constants'] = crds_calc.get_time_constants(mem['fit_equations'])
             self.tau_viewer.plot()
+
+            tau_out = ""
+            for p_i in range(len(mem['time_constants'][0])):
+                tau_avg = np.average(mem['time_constants'][0:len(mem['time_constants'])][p_i])
+
+                pp = PrettyPrinter(indent=2)
+                tau_out += f"""
+Tooth: {p_i+1}
+Tau Average: {tau_avg}
+                """
+# NOTE: Insert above inside fstring to see raw data; 
+# no one should really want to see that standalone?
+# Raw Tau Data:\n{pp.pformat(mem['time_constants'])}
+
+            self.tau_output.setText(tau_out)
 
             self.graph_tabs.setCurrentIndex(5)
         self.fit_button.pressed.connect(init_fit)
