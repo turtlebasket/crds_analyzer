@@ -175,7 +175,7 @@ class TimeConstantGraph(BaseGraph):
         data = []
         for g_i in range(len(mem['time_constants'])):
             data.append(mem['time_constants'][g_i][self.peak_index])
-        self.canv.axes.hist(data, bins='auto', alpha=0.8)
+        self.canv.axes.hist(data, bins='auto', edgecolor='black')
 
 class TimeConstantGraphsViewer(QtWidgets.QTabWidget):
     def __init__(self, x):
@@ -187,7 +187,7 @@ class TimeConstantGraphsViewer(QtWidgets.QTabWidget):
         self.clear()
 
         for p_i in range(len(mem['time_constants'][0])):
-            tab_name = str(p_i+1)
+            tab_name = str(p_i)
             tau_graph = TimeConstantGraph(self)
             tau_graph.set_peak_index(p_i)
             self.addTab(tau_graph, tab_name)

@@ -1,6 +1,6 @@
 import sys
 import crds_calc
-from pandas import read_csv
+from pandas import read_csv, DataFrame
 from PyQt5 import QtGui, QtWidgets, QtCore
 from db import mem
 from mainwin import Ui_MainWindow
@@ -11,7 +11,8 @@ from varname.core import nameof
 from hashlib import md5
 from sqlitedict import SqliteDict
 from pprint import PrettyPrinter
-import numpy as np
+from numpy import average as np_average
+from pyperclip import copy as pycopy
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -264,11 +265,11 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
             tau_out = ""
             for p_i in range(len(mem['time_constants'][0])):
-                tau_avg = np.average(mem['time_constants'][0:len(mem['time_constants'])][p_i])
+                tau_avg = np_average(mem['time_constants'][0:len(mem['time_constants'])][p_i])
 
                 pp = PrettyPrinter(indent=2)
                 tau_out += f"""
-Tooth: {p_i+1}
+Tooth: {p_i}
 Tau Average: {tau_avg}
                 """
 # NOTE: Insert above inside fstring to see raw data; 
@@ -288,6 +289,16 @@ Tau Average: {tau_avg}
         scene = QtWidgets.QGraphicsScene()
         scene.addItem(item)
         self.equation_view.setScene(scene)
+
+        # Tau output actions
+        self.copy_results_button.pressed.connect(lambda: pycopy(self.tau_output.toPlainText()))
+        def export_csv():
+            try:
+                filename, _ = QtWidgets.QFileDialog.getSaveFileName(self)
+                DataFrame(mem['time_constants']).to_csv(filename, index=False)
+            except KeyError:
+                display_error("No tau data to export.")
+        self.export_csv_button.pressed.connect(export_csv)
 
         # Show self
 

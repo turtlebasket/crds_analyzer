@@ -41,7 +41,7 @@
          <x>0</x>
          <y>0</y>
          <width>267</width>
-         <height>917</height>
+         <height>897</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -95,13 +95,13 @@
           <property name="minimumSize">
            <size>
             <width>248</width>
-            <height>306</height>
+            <height>286</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
             <width>248</width>
-            <height>306</height>
+            <height>286</height>
            </size>
           </property>
           <property name="font">
@@ -845,7 +845,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:7.8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
-            <widget class="QPushButton" name="copyResultsButton">
+            <widget class="QPushButton" name="copy_results_button">
              <property name="geometry">
               <rect>
                <x>20</x>
@@ -858,7 +858,7 @@ p, li { white-space: pre-wrap; }
               <string>Copy</string>
              </property>
             </widget>
-            <widget class="QPushButton" name="exportPlaintextButton">
+            <widget class="QPushButton" name="export_csv_button">
              <property name="geometry">
               <rect>
                <x>20</x>
@@ -868,7 +868,7 @@ p, li { white-space: pre-wrap; }
               </rect>
              </property>
              <property name="text">
-              <string>Export Text</string>
+              <string>Export CSV</string>
              </property>
             </widget>
            </widget>

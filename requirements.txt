@@ -3,6 +3,7 @@ pandas
 matplotlib
 numpy
 pyinstaller==4.4
+pyperclip
 sqlitedict
 scipy
 varname
