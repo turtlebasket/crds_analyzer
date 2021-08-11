@@ -41,7 +41,7 @@
          <x>0</x>
          <y>0</y>
          <width>261</width>
-         <height>878</height>
+         <height>909</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -81,7 +81,7 @@
                 <double>0.000000000000000</double>
                </property>
                <property name="singleStep">
-                <double>0.010000000000000</double>
+                <double>0.000001000000000</double>
                </property>
               </widget>
              </item>
@@ -124,7 +124,7 @@
             </rect>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="page">
             <widget class="QWidget" name="formLayoutWidget_4">
@@ -187,14 +187,14 @@
                <x>0</x>
                <y>0</y>
                <width>222</width>
-               <height>101</height>
+               <height>111</height>
               </rect>
              </property>
              <layout class="QFormLayout" name="formLayout">
               <item row="0" column="0">
                <widget class="QLabel" name="label_2">
                 <property name="text">
-                 <string>Estimated pass time</string>
+                 <string>Group Length</string>
                 </property>
                </widget>
               </item>
@@ -415,7 +415,7 @@
             <rect>
              <x>9</x>
              <y>20</y>
-             <width>221</width>
+             <width>238</width>
              <height>111</height>
             </rect>
            </property>
@@ -423,7 +423,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="label_7">
               <property name="text">
-               <string>Overlapped Peak Width</string>
+               <string>Added Peak Length</string>
               </property>
              </widget>
             </item>
@@ -551,7 +551,7 @@
           <property name="minimumSize">
            <size>
             <width>239</width>
-            <height>351</height>
+            <height>376</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -576,7 +576,7 @@
              <x>10</x>
              <y>90</y>
              <width>221</width>
-             <height>111</height>
+             <height>118</height>
             </rect>
            </property>
            <layout class="QFormLayout" name="formLayout_3">
@@ -661,7 +661,7 @@
            <property name="geometry">
             <rect>
              <x>40</x>
-             <y>200</y>
+             <y>220</y>
              <width>151</width>
              <height>28</height>
             </rect>
@@ -682,7 +682,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>260</y>
+             <y>280</y>
              <width>222</width>
              <height>82</height>
             </rect>
@@ -760,7 +760,7 @@
            <property name="geometry">
             <rect>
              <x>10</x>
-             <y>230</y>
+             <y>250</y>
              <width>151</width>
              <height>20</height>
             </rect>
@@ -872,7 +872,7 @@
              <x>0</x>
              <y>0</y>
              <width>279</width>
-             <height>548</height>
+             <height>527</height>
             </rect>
            </property>
            <widget class="QGroupBox" name="groupBox_3">
@@ -961,7 +961,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1343</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
