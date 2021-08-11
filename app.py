@@ -11,8 +11,9 @@ from varname.core import nameof
 from hashlib import md5
 from sqlitedict import SqliteDict
 from pprint import PrettyPrinter
-from numpy import average as np_average
+from numpy import average as np_average, arange
 from pyperclip import copy as pycopy
+from os import getcwd
 
 class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
@@ -269,7 +270,7 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
                 pp = PrettyPrinter(indent=2)
                 tau_out += f"""
-Tooth: {p_i}
+Tooth: {p_i+1}
 Tau Average: {tau_avg}
                 """
 # NOTE: Insert above inside fstring to see raw data; 
@@ -294,10 +295,17 @@ Tau Average: {tau_avg}
         self.copy_results_button.pressed.connect(lambda: pycopy(self.tau_output.toPlainText()))
         def export_csv():
             try:
-                filename, _ = QtWidgets.QFileDialog.getSaveFileName(self)
-                DataFrame(mem['time_constants']).to_csv(filename, index=False)
+                mem['time_constants']
             except KeyError:
                 display_error("No tau data to export.")
+                return
+            filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Export CSV", "file.csv")
+            df = DataFrame(mem['time_constants'])
+            # df.index = arange(1, len(df)+1)
+            try:
+                df.to_csv(filename, index=False)
+            except:
+                pass
         self.export_csv_button.pressed.connect(export_csv)
 
         # Show self
