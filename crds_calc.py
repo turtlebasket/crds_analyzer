@@ -282,6 +282,7 @@ def fit_peaks(
         for peak_data in peaks_cut:
             x_data = np.arange(len(peak_data)) # just placeholder indices
             # x_data = np.arange(0, len(peak_data)*mem['timestep'], mem['timestep'])
+            print(x_data)
             if not use_advanced:
                 peak_index = np.argmax(peak_data, axis=0)
             else:
@@ -314,7 +315,7 @@ def get_time_constants(equation_data):
     for r in equation_data:
         row = []
         for e in r:
-            tau = e['popt'][3]
+            tau = e['popt'][3]*mem['timestep']
             row.append(tau)
         tau_data.append(row)
 

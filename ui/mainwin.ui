@@ -19,13 +19,13 @@
      <widget class="QScrollArea" name="scrollArea">
       <property name="minimumSize">
        <size>
-        <width>280</width>
+        <width>286</width>
         <height>0</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>280</width>
+        <width>286</width>
         <height>16777215</height>
        </size>
       </property>
@@ -39,9 +39,9 @@
        <property name="geometry">
         <rect>
          <x>0</x>
-         <y>0</y>
-         <width>261</width>
-         <height>926</height>
+         <y>-240</y>
+         <width>270</width>
+         <height>928</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -49,14 +49,14 @@
          <widget class="QGroupBox" name="groupBox_5">
           <property name="minimumSize">
            <size>
-            <width>239</width>
+            <width>248</width>
             <height>0</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>239</width>
-            <height>16777215</height>
+            <width>248</width>
+            <height>64</height>
            </size>
           </property>
           <property name="title">
@@ -75,7 +75,7 @@
              <item row="0" column="1">
               <widget class="QDoubleSpinBox" name="spin_timestep">
                <property name="decimals">
-                <number>6</number>
+                <number>10</number>
                </property>
                <property name="minimum">
                 <double>0.000000000000000</double>
@@ -94,14 +94,14 @@
          <widget class="QGroupBox" name="groupBox">
           <property name="minimumSize">
            <size>
-            <width>239</width>
-            <height>278</height>
+            <width>248</width>
+            <height>306</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>239</width>
-            <height>278</height>
+            <width>248</width>
+            <height>306</height>
            </size>
           </property>
           <property name="font">
@@ -198,7 +198,7 @@
                  <x>0</x>
                  <y>0</y>
                  <width>211</width>
-                 <height>91</height>
+                 <height>111</height>
                 </rect>
                </property>
                <layout class="QFormLayout" name="formLayout">
@@ -360,13 +360,13 @@
          <widget class="QGroupBox" name="groupBox_4">
           <property name="minimumSize">
            <size>
-            <width>239</width>
+            <width>248</width>
             <height>165</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>239</width>
+            <width>248</width>
             <height>165</height>
            </size>
           </property>
@@ -505,13 +505,13 @@
          <widget class="QGroupBox" name="groupBox_2">
           <property name="minimumSize">
            <size>
-            <width>239</width>
-            <height>376</height>
+            <width>248</width>
+            <height>350</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>239</width>
+            <width>248</width>
             <height>351</height>
            </size>
           </property>
@@ -523,11 +523,18 @@
            </font>
           </property>
           <property name="title">
-           <string>INITIAL FIT CONFIG</string>
+           <string>INITIAL FIT CONFIG (timescale: ticks)</string>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
-            <widget class="QGraphicsView" name="equation_view"/>
+            <widget class="QGraphicsView" name="equation_view">
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>66</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item>
             <layout class="QFormLayout" name="formLayout_3">

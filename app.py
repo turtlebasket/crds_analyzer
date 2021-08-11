@@ -58,7 +58,9 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             timestep = (mem['x_data'][-1] - mem['x_data'][0]) / len(mem['x_data'])
             mem['timestep'] = timestep
             self.spin_timestep.setValue(timestep)
-            print(timestep)
+            def set_timestep(x):
+                mem['timestep'] = x
+            self.spin_timestep.valueChanged.connect(lambda v: set_timestep(v))
             self.raw_data_graph.plot() # Graph new stuff
 
             # self.groups_graph.clear() # Clear old stuff
@@ -78,6 +80,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 self.graph_tabs.setCurrentIndex(0)
 
             # Load from persistent storage & bind write actions
+            # NOTE: This is incomplete, but can very easily finished if someone can figure out what's wrong.
+            # Currently using https://github.com/RaRe-Technologies/sqlitedict for local db handling.
 
             # path_hash = md5(filename.encode('utf-8')).hexdigest()
 
