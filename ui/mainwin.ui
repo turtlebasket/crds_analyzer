@@ -810,7 +810,7 @@
               <x>10</x>
               <y>10</y>
               <width>261</width>
-              <height>351</height>
+              <height>381</height>
              </rect>
             </property>
             <property name="minimumSize">
@@ -868,7 +868,20 @@ p, li { white-space: pre-wrap; }
               </rect>
              </property>
              <property name="text">
-              <string>Export CSV</string>
+              <string>Export Tau CSV</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="export_csv_button_resid">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>350</y>
+               <width>221</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Export Residuals CSV</string>
              </property>
             </widget>
            </widget>

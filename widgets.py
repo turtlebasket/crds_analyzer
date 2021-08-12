@@ -102,13 +102,19 @@ class FitGraph(BaseGraph):
         self.peak_index = i
         
     def plot_data(self):
+        resid = []
         for g_i in range(len(mem['isolated_peaks'])):
             peak = mem['isolated_peaks'][g_i][self.peak_index]
             x_data = np.arange(len(peak))
             x_data_target = x_data[mem['overlayed_peak_indices'][g_i][self.peak_index]+mem['shift_over_fit']:]
+            peak_target = peak[mem['overlayed_peak_indices'][g_i][self.peak_index]+mem['shift_over_fit']:]
             popt = mem['fit_equations'][g_i][self.peak_index]['popt']
             self.canv.axes.plot(peak)
             self.canv.axes.plot(x_data_target, exp_func(x_data_target, *popt), color='red')
+            
+            resid.append(peak_target - exp_func(x_data_target, *popt)),
+            self.canv.axes.plot(x_data_target, peak_target - exp_func(x_data_target, *popt), c='green')
+        mem['residuals'] = resid
 
 class FitsGraphViewer(QtWidgets.QTabWidget):
     def __init__(self, x):
@@ -187,7 +193,7 @@ class TimeConstantGraphsViewer(QtWidgets.QTabWidget):
         self.clear()
 
         for p_i in range(len(mem['time_constants'][0])):
-            tab_name = str(p_i)
+            tab_name = str(p_i+1)
             tau_graph = TimeConstantGraph(self)
             tau_graph.set_peak_index(p_i)
             self.addTab(tau_graph, tab_name)

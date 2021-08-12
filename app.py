@@ -90,17 +90,21 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             # path_hash = md5(filename.encode('utf-8')).hexdigest()
 
             # def set_value(name, val):
-            #     with SqliteDict(f"./db/{path_hash}.sqlite", autocommit=True) as storage:
+            #     with SqliteDict(f"{getcwd()}/db/{path_hash}.sqlite", autocommit=True) as storage:
             #         print(f"Change {name} to {val}.")
             #         storage[name] = val
+            #         storage.commit()
             #         print(f"Check: {storage[name]}")
 
-            # with SqliteDict(f"./db/{path_hash}.sqlite", autocommit=True) as storage:
+            #     with SqliteDict(f"{getcwd()}/db/{path_hash}.sqlite", autocommit=True) as storage:
+            #         print(f"Check: {storage[name]}")
+
+            # with SqliteDict(f"{getcwd()}/db/{path_hash}.sqlite", autocommit=True) as storage:
 
             #     for w in synced_value_widgets:
             #         name = w.objectName()
             #         try:
-            #             w.setValue(bool(storage[name]))
+            #             w.setValue(storage[name])
             #             print(f"Loaded {name}.")
             #         except KeyError:
             #             print(f"Failed to load object {name}.")
@@ -110,8 +114,8 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             #     for w in synced_check_widgets:
             #         name = w.objectName()
             #         try:
-            #             w.setChecked(storage[name])
-            #             print(f"Loaded {name}.")
+            #             w.setChecked(bool(storage[name]))
+            #             print(f"Loaded {name} as {storage[name]}.")
             #         except KeyError:
             #             print(f"Failed to load object {name}.")
             #             pass
@@ -307,6 +311,21 @@ Tau Average: {tau_avg}
             except:
                 pass
         self.export_csv_button.pressed.connect(export_csv)
+
+        def export_csv_residuals():
+            try:
+                mem['residuals']
+            except KeyError:
+                display_error("No residual data to export.")
+                return
+            filename, _ = QtWidgets.QFileDialog.getSaveFileName(self, "Export Residuals CSV", "residuals.csv")
+            df = DataFrame(mem['residuals'])
+            # df.index = arange(1, len(df)+1)
+            try:
+                df.to_csv(filename, index=False)
+            except:
+                pass
+        self.export_csv_button_resid.pressed.connect(export_csv_residuals)
 
         # Show self
 
