@@ -11,7 +11,7 @@ from varname.core import nameof
 from hashlib import md5
 from sqlitedict import SqliteDict
 from pprint import PrettyPrinter
-from numpy import average as np_average, arange
+from numpy import average as np_average, arange, std as np_std
 from pyperclip import copy as pycopy
 from os import getcwd
 
@@ -271,11 +271,13 @@ class AppWindow(QtWidgets.QMainWindow, Ui_MainWindow):
             tau_out = ""
             for p_i in range(len(mem['time_constants'][0])):
                 tau_avg = np_average(mem['time_constants'][0:len(mem['time_constants'])][p_i])
+                tau_std = np_std(mem['time_constants'][0:len(mem['time_constants'])][p_i])
 
                 pp = PrettyPrinter(indent=2)
                 tau_out += f"""
 Tooth: {p_i+1}
 Tau Average: {tau_avg}
+Tau StD: {tau_std}
                 """
 # NOTE: Insert above inside fstring to see raw data; 
 # no one should really want to see that standalone?
