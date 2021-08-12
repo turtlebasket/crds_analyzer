@@ -1,6 +1,6 @@
 # CRDS Scan Analyzer
 
-<img src="screenshots/fit_demo.png" width=600/>
+<img src="screenshots/fit_demo.png" width=800/>
 
 ## Basics
 
@@ -50,7 +50,7 @@ The SpacedGroups algorithm uses the length of each group (looking *length* in ea
 
 **Notes**
 
-- You can custom start and end cutoffs for grouping in case there's only part of a group at the beginning or end
+- You can set custom start and end cutoffs for grouping in case there's only part of a group at the beginning or end
 
 - You can choose to exclude mirrored groups (which occur every other group). Or don't. Depends on how you configured the lab setup.
 
@@ -107,8 +107,8 @@ This is where the overlayed peak groups are added together, and the added peaks 
 
 ## Screenshots
 
-<img src="screenshots/time_constant_demo.png" width=600/>
+<img src="screenshots/time_constant_demo.png" width=800/>
 
-<img src="screenshots/correlation_demo.png" width=600/>
+<img src="screenshots/correlation_demo.png" width=800/>
 
-<img src="screenshots/voltage_demo.png" width=600/>
+<img src="screenshots/voltage_demo.png" width=800/>
